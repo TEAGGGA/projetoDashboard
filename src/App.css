@@ -1,0 +1,381 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --bg-dark: #09090b;
+  --text-primary: #ffffff;
+  --text-secondary: #a1a1aa;
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --primary-gap: 24px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ==========================================================================
+   RESET E ESTRUTURA GLOBAL
+   ========================================================================== */
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* BACKGROUND FIXO */
+.background-blobs {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.5;
+}
+
+.blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: #333; }
+.blob-1.bom { background: #059669; }
+.blob-1.ruim { background: #dc2626; }
+.blob-1.neutro { background: #d97706; }
+.blob-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: #1d4ed8; opacity: 0.2; }
+
+
+/* ==========================================================================
+   LAYOUT RESPONSIVO (MOBILE FIRST)
+   ========================================================================== */
+.layout-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 20px; 
+  position: relative;
+  z-index: 1;
+}
+
+.dashboard-container {
+  width: 100%;
+  max-width: 480px; 
+  display: flex;
+  flex-direction: column;
+  gap: var(--primary-gap);
+  margin: auto 0;
+}
+
+/* Layout dos Cards (Mobile Flex com espaço garantido) */
+.grid-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 24px; /* Espaço vital entre Hero e Previsão */
+  width: 100%;
+}
+
+/* ==========================================================================
+   COMPONENTES
+   ========================================================================== */
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+/* NAVBAR */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  border-radius: 16px;
+}
+
+.brand { font-weight: 800; font-size: 1.2rem; letter-spacing: -0.03em; }
+
+.btn-icon {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  width: 40px; height: 40px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.spin { animation: spin 1s linear infinite; }
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+/* HERO SECTION */
+.hero-card {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  gap: 20px;
+}
+
+.hero-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.location {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  background: rgba(0,0,0,0.2);
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.btn-advice {
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border: none;
+}
+
+.aqi-display { margin: 10px 0; }
+.aqi-number {
+  font-size: clamp(4rem, 15vw, 6rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -4px;
+}
+.aqi-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* DETALHES GERAIS */
+.details-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; 
+}
+
+/* PREVISÃO (SCROLL HORIZONTAL) */
+.forecast-row {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.section-title { font-size: 0.95rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; }
+
+.forecast-scroll {
+  display: flex;
+  gap: 20px; 
+  overflow-x: auto;
+  padding-bottom: 8px;
+  padding-right: 24px; 
+  align-items: stretch;
+}
+.forecast-scroll::-webkit-scrollbar { display: none; }
+
+.forecast-item {
+  min-width: 85px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 8px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 20px;
+  border: 1px solid var(--glass-border);
+}
+.forecast-time { font-size: 0.75rem; color: var(--text-secondary); }
+.forecast-temp { font-weight: 700; font-size: 1rem; }
+.forecast-rain { font-size: 0.7rem; color: #60a5fa; display: flex; align-items: center; gap: 2px; }
+
+/* ESTATÍSTICAS (STATUS - TEMP/UMID/VENTO) */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 20px; 
+  width: 100%;
+}
+
+.stat-card {
+  padding: 16px 10px; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 6px;
+  width: 100%; 
+  background: rgba(255,255,255,0.04);
+  border-radius: 20px;
+  border: 1px solid var(--glass-border);
+}
+
+.stat-icon { opacity: 0.7; margin-bottom: 4px; }
+.stat-value { font-size: 1.1rem; font-weight: 700; }
+.stat-label { font-size: 0.65rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 600; }
+
+/* GRÁFICO */
+.chart-card {
+  padding: 20px;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+}
+.chart-header { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; font-weight: 600; }
+
+/* FOOTER */
+.footer {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+.dev-info { display: flex; flex-direction: column; line-height: 1.2; }
+.dev-label { font-size: 0.65rem; color: var(--text-secondary); text-transform: uppercase; }
+.dev-name { font-weight: 700; font-size: 0.9rem; }
+.social-links { display: flex; gap: 12px; }
+.social-btn { color: var(--text-secondary); }
+
+/* ESTILO DA LOGO TEAGA */
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Espaço entre o ícone e o texto */
+}
+
+.logo-icon {
+  width: 32px;
+  height: 32px;
+  /* Brilho verde suave */
+  filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.5));
+}
+
+.logo-text {
+  font-family: 'Inter', sans-serif;
+  font-weight: 800; 
+  font-size: 1.4rem;
+  color: #ffffff;
+  letter-spacing: 0.05em; 
+}
+
+
+/* ==========================================================================
+   VERSÃO DESKTOP (PC) - WEB
+   ========================================================================== */
+@media (min-width: 1024px) {
+  .layout-wrapper {
+    justify-content: center;
+    padding: 40px;
+  }
+
+  .dashboard-container {
+    max-width: 1100px;
+    margin: 0;
+  }
+
+  /* Na versão PC, o grid muda para duas colunas laterais */
+  .grid-layout {
+    display: grid; /* Sobrescreve o flex do mobile */
+    grid-template-columns: 360px 1fr;
+    gap: 24px;
+    align-items: stretch;
+  }
+
+  /* Previsão vira Grid no PC */
+  .forecast-row { gap: 20px; height: auto; }
+  
+  .forecast-scroll {
+    display: grid; 
+    grid-template-columns: repeat(6, 1fr); 
+    gap: 16px;
+    overflow-x: visible;
+    padding-bottom: 0;
+  }
+  
+  .forecast-item {
+    width: 100%;
+    min-width: auto;
+    padding: 20px 10px;
+    background: rgba(255,255,255,0.04);
+  }
+
+  /* Stats no PC */
+  .stats-row {
+    gap: 24px; 
+  }
+  .stat-card {
+    align-items: flex-start;
+    padding: 24px;
+    text-align: left;
+  }
+  .stat-value { font-size: 1.5rem; }
+  .stat-label { font-size: 0.8rem; }
+}
+
+/* MODAL */
+.modal-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px);
+  z-index: 999; display: flex; align-items: center; justify-content: center; padding: 20px;
+}
+.modal-content {
+  width: 100%; max-width: 420px; padding: 24px;
+  background: #18181b; border: 1px solid var(--glass-border);
+  display: flex; flex-direction: column; gap: 20px;
+  border-radius: 24px;
+}
+.modal-header { display: flex; justify-content: space-between; align-items: center; }
+.btn-close { background: none; border: none; color: var(--text-secondary); cursor: pointer; }
+.advice-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.advice-list li {
+  padding: 12px; background: rgba(255,255,255,0.05); border-radius: 12px;
+  font-size: 0.9rem; line-height: 1.5; color: #e4e4e7;
+}
+.btn-action {
+  padding: 14px; border-radius: 14px; border: none; color: #fff; font-weight: 700; cursor: pointer;
+}
+
+/* Pequeno ajuste da logo no mobile */
+@media (max-width: 480px) {
+  .logo-icon { width: 28px; height: 28px; }
+  .logo-text { font-size: 1.2rem; }
+}
