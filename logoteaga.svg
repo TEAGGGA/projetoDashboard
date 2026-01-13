@@ -1,0 +1,7 @@
+<!-- sample rectangle -->
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="logo-icon">
+                <path d="M4 24C4 24 8 20 18 20C23 20 26 22 26 22" stroke="#10b981" strokeWidth="3" strokeLinecap="round"/>
+                <path d="M6 16C6 16 10 12 18 12C22 12 24 14 24 14" stroke="#10b981" strokeWidth="3" strokeLinecap="round"/>
+                <path d="M8 8C8 8 12 4 18 4C20 4 21 5 21 5" stroke="#10b981" strokeWidth="3" strokeLinecap="round"/>
+                <circle cx="26" cy="22" r="3" fill="#10b981"/>
+              </svg>
