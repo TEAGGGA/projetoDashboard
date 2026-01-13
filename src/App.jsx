@@ -11,24 +11,16 @@ import './App.css'
 function App() {
   const [loading, setLoading] = useState(true)
   const [modalOpen, setModalOpen] = useState(false)
-  
-  // Estado inicial organizado
   const [clima, setClima] = useState({
     cidade: "Manaus",
-    aqi: 0,
-    temp: 0,
-    umidade: 0,
-    vento: 0,
-    status: "Carregando...",
-    tipo: "neutro",
-    historico: [],
-    previsao: []
+    aqi: 0, temp: 0, umidade: 0, vento: 0,
+    status: "Carregando...", tipo: "neutro",
+    historico: [], previsao: []
   })
 
   const LAT = -3.119
   const LON = -60.021
 
-  // Configuração da UI baseada no AQI
   const uiConfig = useMemo(() => {
     const { aqi } = clima
     if (loading) return { color: '#FFF', icon: <RefreshCw className="spin"/> }
@@ -37,14 +29,12 @@ function App() {
     return { color: '#ef4444', icon: <Frown size={32} /> }
   }, [clima.aqi, loading])
 
-  // Helper para ícones do tempo
   const getWeatherIcon = (code) => {
     if (code <= 1) return <Sun size={20} />
     if (code <= 3) return <CloudSun size={20} />
     return <CloudRain size={20} />
   }
 
-  // Função principal de busca
   const buscarDadosReais = async () => {
     setLoading(true)
     try {
@@ -60,14 +50,11 @@ function App() {
       let tipoTema = "bom"
 
       if (aqi > 50 && aqi <= 100) { 
-        statusTexto = "Moderado"
-        tipoTema = "neutro" 
+        statusTexto = "Moderado"; tipoTema = "neutro" 
       } else if (aqi > 100) { 
-        statusTexto = "Insalubre"
-        tipoTema = "ruim" 
+        statusTexto = "Insalubre"; tipoTema = "ruim" 
       }
 
-      // Tratamento do Gráfico (Últimas 24h)
       const horasRaw = dadosAr.hourly.time.slice(-24)
       const aqiRaw = dadosAr.hourly.us_aqi.slice(-24)
       const dadosGrafico = horasRaw.map((hora, index) => ({
@@ -75,7 +62,6 @@ function App() {
         aqi: aqiRaw[index]
       }))
 
-      // Tratamento da Previsão (Próximas 5h)
       const currentHourIndex = new Date().getHours()
       const next5Hours = dadosClima.hourly.time.slice(currentHourIndex, currentHourIndex + 6)
       
@@ -95,14 +81,12 @@ function App() {
         temp: Math.round(dadosClima.current.temperature_2m),
         umidade: dadosClima.current.relative_humidity_2m,
         vento: dadosClima.current.wind_speed_10m,
-        status: statusTexto,
-        tipo: tipoTema,
-        historico: dadosGrafico,
-        previsao: dadosPrevisao
+        status: statusTexto, tipo: tipoTema,
+        historico: dadosGrafico, previsao: dadosPrevisao
       })
 
     } catch (erro) {
-      console.error("Deu zebra na API:", erro)
+      console.error("Erro API:", erro)
       setClima(prev => ({...prev, status: "Offline"}))
     } finally {
       setLoading(false)
@@ -111,29 +95,14 @@ function App() {
 
   useEffect(() => { buscarDadosReais() }, [])
 
-  // Textos de recomendação
   const getHealthAdvice = () => {
-    if (clima.tipo === 'bom') return [
-      "Ambiente seguro: Pode arrochar nas atividades lá fora.",
-      "Ventilação: Deixa o vento bater, abre as janelas.",
-      "Geral: Tudo tranquilo, sem agonia."
-    ]
-    if (clima.tipo === 'neutro') return [
-      "Atenção: Quem tem asma ou rinite, vai com calma.",
-      "Olho vivo: Se o tempo fechar, te cuida.",
-      "Exercícios: Dá pra fazer, mas sem exagerar."
-    ]
-    return [
-      "Perigo: Melhor ficar mocazado em casa.",
-      "Proteção: Se sair, usa máscara, parente.",
-      "Casa: Fecha tudo e liga o umidificador se tiver.",
-      "Água: Bebe muita água pra não secar."
-    ]
+    if (clima.tipo === 'bom') return ["Ambiente seguro: Pode sair.", "Ventilação: Abra janelas.", "Geral: Tudo tranquilo."]
+    if (clima.tipo === 'neutro') return ["Atenção: Asma/Rinite cuidado.", "Olho vivo: Tempo mudando.", "Exercícios: Com moderação."]
+    return ["Perigo: Fique em casa.", "Proteção: Use máscara.", "Casa: Feche tudo e hidrate-se."]
   }
 
   return (
     <div className="layout-wrapper">
-      {/* Background Animado */}
       <div className="background-blobs">
         <motion.div 
           className={`blob blob-1 ${clima.tipo}`} 
@@ -144,13 +113,9 @@ function App() {
       </div>
 
       <div className="dashboard-container">
-        
-        {/* Navbar */}
         <motion.nav 
           className="navbar glass-card"
-          initial={{ y: -20, opacity: 0 }} 
-          animate={{ y: 0, opacity: 1 }} 
-          transition={{ duration: 0.5 }}
+          initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}
         >
           <span className="brand">EcoMonitor<span style={{color: uiConfig.color}}>.Pro</span></span>
           <button className="btn-icon" onClick={buscarDadosReais} disabled={loading}>
@@ -159,27 +124,19 @@ function App() {
         </motion.nav>
 
         <main className="grid-layout">
-          {/* Cartão Principal (Hero) */}
           <motion.section className="hero-card glass-card" layout>
             <header className="hero-header">
               <div className="location">
                 <MapPin size={16} style={{color: uiConfig.color}} /> 
                 <span>{clima.cidade}</span>
               </div>
-              
               <motion.button 
                 className="status-pill btn-advice"
-                style={{
-                  backgroundColor: `${uiConfig.color}15`, 
-                  color: uiConfig.color, 
-                  border: `1px solid ${uiConfig.color}30`
-                }}
+                style={{ backgroundColor: `${uiConfig.color}15`, color: uiConfig.color, border: `1px solid ${uiConfig.color}30` }}
                 onClick={() => setModalOpen(true)}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
               >
-                <Info size={14} style={{marginRight: 6}}/>
-                Recomendações
+                <Info size={14} style={{marginRight: 6}}/> Recomendações
               </motion.button>
             </header>
             
@@ -192,10 +149,7 @@ function App() {
             <p className="aqi-label">Índice AQI (US Standard)</p>
           </motion.section>
 
-          {/* Coluna de Detalhes */}
           <div className="details-column">
-            
-            {/* Previsão */}
             <section className="forecast-row glass-card">
               <h3 className="section-title">Previsão (Próximas Horas)</h3>
               <div className="forecast-scroll">
@@ -206,15 +160,12 @@ function App() {
                       {getWeatherIcon(item.code)}
                     </div>
                     <span className="forecast-temp">{item.temp}°</span>
-                    <span className="forecast-rain">
-                      <Droplets size={10}/> {item.chuva}%
-                    </span>
+                    <span className="forecast-rain"><Droplets size={10}/> {item.chuva}%</span>
                   </div>
                 ))}
               </div>
             </section>
 
-            {/* Estatísticas */}
             <section className="stats-row">
               <div className="stat-card glass-card">
                 <Thermometer size={20} className="stat-icon" />
@@ -233,7 +184,6 @@ function App() {
               </div>
             </section>
 
-            {/* Gráfico */}
             <section className="chart-card glass-card">
               <div className="chart-header">
                 <TrendingUp size={16} style={{color: uiConfig.color}} />
@@ -262,32 +212,25 @@ function App() {
           </div>
         </main>
 
-        {/* Footer com LOGO TEAGA */}
         <footer className="footer glass-card">
           <div className="dev-info">
             <span className="dev-label" style={{marginBottom: 4}}>Desenvolvido por</span>
-            
-            {/* LOGO TEAGA */}
             <div className="brand-logo">
-              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="logo-icon">
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" className="logo-icon">
                 <path d="M4 24C4 24 8 20 18 20C23 20 26 22 26 22" stroke="#10b981" strokeWidth="3" strokeLinecap="round"/>
                 <path d="M6 16C6 16 10 12 18 12C22 12 24 14 24 14" stroke="#10b981" strokeWidth="3" strokeLinecap="round"/>
-                <path d="M8 8C8 8 12 4 18 4C20 4 21 5 21 5" stroke="#10b981" strokeWidth="3" strokeLinecap="round"/>
                 <circle cx="26" cy="22" r="3" fill="#10b981"/>
               </svg>
               <span className="logo-text">TEAGA</span>
             </div>
           </div>
-          
           <div className="social-links">
             <a href="https://github.com/TEAGGGA" target="_blank" className="social-btn"><Github size={18} /></a>
             <a href="https://linkedin.com/in/teagga" target="_blank" className="social-btn"><Linkedin size={18} /></a>
           </div>
         </footer>
+      </div>
 
-      </div>  
-
-      {/* Modal de Recomendações */}
       <AnimatePresence>
         {modalOpen && (
           <motion.div 
@@ -307,9 +250,7 @@ function App() {
               <div className="modal-body">
                 <p className="modal-intro">Status atual: <strong style={{color: uiConfig.color}}>{clima.status}</strong></p>
                 <ul className="advice-list">
-                  {getHealthAdvice().map((dica, i) => (
-                    <li key={i}>{dica}</li>
-                  ))}
+                  {getHealthAdvice().map((dica, i) => <li key={i}>{dica}</li>)}
                 </ul>
               </div>
               <button className="btn-action" style={{backgroundColor: uiConfig.color}} onClick={() => setModalOpen(false)}>
