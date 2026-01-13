@@ -281,11 +281,11 @@ function App() {
           
           <div className="social-links">
             <a href="https://github.com/TEAGGGA" target="_blank" className="social-btn"><Github size={18} /></a>
-            <a href="https://linkedin.com/in/" target="_blank" className="social-btn"><Linkedin size={18} /></a>
+            <a href="https://linkedin.com/in/teagga" target="_blank" className="social-btn"><Linkedin size={18} /></a>
           </div>
         </footer>
 
-      </div>
+      </div>  
 
       {/* Modal de Recomendações */}
       <AnimatePresence>
